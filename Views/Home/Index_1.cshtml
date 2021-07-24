@@ -1,0 +1,534 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@inject OnlineSabong.VirtualGuide.Services.Interfaces.IUserService StatsService
+@model OnlineSabong.VirtualGuide.Models.IndexViewModel
+
+<style>
+    .hide {
+        display: none;
+    }
+
+    .panel-dark {
+        background-image: -webkit-linear-gradient(top,#3c3c3c 0,#222 100%);
+        background-image: -o-linear-gradient(top,#3c3c3c 0,#222 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#3c3c3c),to(#222));
+        background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        background-repeat: repeat-x;
+    }
+
+    #tbodyResults tr:first-child td {
+        border-top: none;
+    }
+
+    #tbodyResults {
+        color: white;
+    }
+
+        #tbodyResults tr td {
+            border-top-color: #504f4f;
+        }
+
+    .box {
+        border-radius: 4px 4px 0 0;
+        background: #292c31;
+        border: 1px solid hsla(0,0%,100%,.1);
+    }
+
+        .box .title {
+            padding-top: 10px;
+            display: block;
+            padding-bottom: 10px;
+            color: #ffdc11 !important;
+            font-size: 12px;
+        }
+
+    .panel {
+        border: none !important;
+        background: #292c31;
+        box-shadow:none;
+    }
+
+    .btn-danger {
+        background-image: none !important;
+        background-color: #f34141;
+    }
+    .btn-primary {
+        background-image: none !important;
+        background-color: #1e81f1;
+    }
+    .btn-success {
+        background-image: none !important;
+        background-color: #009900 !important;
+    }
+    .btn-outline-secondary {
+        background: none;
+        background-color: none;
+        border: 1px solid gray;
+        color: gray;
+        width:100%;
+    }
+
+    .form-check-inline{
+        float:left;
+        margin-right:10px;
+        min-width:120px;
+    }
+
+    #panelMeronAttributes form label {
+        color: #f34141;
+    }
+    #panelWalaAttributes form label {
+        color: #1e81f1;
+    }
+    #panelAdminTools form label {
+        color: #22cca5;
+    }
+
+    form label.form-check-label {
+        font-size: 12px;
+    }
+
+</style>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Change Password</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="text-center" style="color:#ffdc11!important">
+            <img src="~/images/dracaryslogo.png" style="width:6em;margin-bottom:20px;" />
+            <p>Welcome to WPC 15 Online Sabong Predictor App. Your virtual guide to win!</p>
+            <p>How to use? Please watch the video <a href="#">here</a></p>
+        </div>
+        <div class="row" style="margin-top:35px;margin-bottom:35px;">
+            <div class="col-md-6">
+                <div class="col-md-12 box" style="padding-left:5px;padding-right:0;" id="panelMeronAttributes">
+                    <strong class="title">MERON ATTRIBUTES</strong>
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding-top:.5px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="frmMeron">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Type</label>
+                                            <select class="form-control form-control-lg" id="slcMeronType">
+                                                @foreach (var rooster in Model.Roosters)
+                                                {
+                                                    <option value="@rooster.Id">@rooster.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Dark Legs</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Yellow Legs</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="3" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">White Legs</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="hackle" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Light Hackle</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="hackle" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Dark Hackle</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="bannered" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Bannered</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="bannered" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Non-Bannered</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        @if (Convert.ToBoolean(Model.User.IsAdmin))
+                                        {
+                                            <div class="form-group text-right">
+                                                <button type="button" class="btn btn-danger" id="btnMarkMeronWinner">Mark as Winner</button>
+                                            </div>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 box" style="padding-left:5px;padding-right:0;margin-top:10px;" id="panelWalaAttributes">
+                    <strong class="title">WALA ATTRIBUTES</strong>
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding-top:.5px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="frmWala">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Type</label>
+                                            <select class="form-control form-control-lg" id="slcWalaType">
+                                                @foreach (var rooster in Model.Roosters)
+                                                {
+                                                    <option value="@rooster.Id">@rooster.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Dark Legs</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Yellow Legs</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="3" name="legcolor" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">White Legs</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="hackle" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Light Hackle</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="hackle" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Dark Hackle</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="1" name="bannered" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Bannered</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" value="2" name="bannered" class="form-check-input">
+                                                <label class="form-check-label" for="exampleCheck1">Non-Bannered</label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        @if (Convert.ToBoolean(Model.User.IsAdmin))
+                                        {
+                                            <div class="form-group text-right">
+                                                <button type="button" class="btn btn-primary" id="btnMarkWalaWinner">Mark as Winner</button>
+                                            </div>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="col-md-12 box">
+                    <strong class="title">POSSIBLE WINNER</strong>
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="height:143px;">
+                            <div class="row" style="margin-bottom:10px;">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-secondary" id="btnNextResult" style="width:100%;background:none;background-color:#22cca5;color:#504f4f;">GET POSSIBLE WINNER </button>
+                                </div>
+                                <div class="col-md-2"></div>
+                            </div>
+                            <div class="row hide" id="preloaderRow" style="margin-bottom:25px;">
+                                <div class="col-md-12 text-center">
+                                    <img src="~/images/25.gif" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center hide" id="nextResult" style="margin-bottom:25px;">
+                                    <h1>MERON - L</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Convert.ToBoolean(Model.User.IsAdmin))
+                {
+                    <div class="col-md-12 box" style="padding-left:5px;padding-right:0;margin-top:10px;" id="panelAdminTools">
+                    <strong class="title">ADMIN TOOLS</strong>
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding-top:.5px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="frmMeron">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Reset Stats</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Type</label>
+                                                    <select class="form-control form-control-lg" id="slcStatRooster">
+                                                        @foreach (var rooster in Model.Roosters)
+                                                        {
+                                                            <option value="@rooster.Id">@rooster.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Dark Legs</label>
+                                                    <input type="number" class="form-control" id="txtStatDarkLegs"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Yellow Legs</label>
+                                                    <input type="number" class="form-control" id="txtStatYellowLegs" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">White Legs</label>
+                                                    <input type="number" class="form-control" id="txtWhiteDarkLegs" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Dark Hackle</label>
+                                                    <input type="number" class="form-control" id="txtStatDarkHackle" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Light Hackle</label>
+                                                    <input type="number" class="form-control" id="txtStatLightHackle" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Bannered</label>
+                                                    <input type="number" class="form-control" id="txtStatBannered" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Non-Bannered</label>
+                                                    <input type="number" class="form-control" id="txtStatNonBannered" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Wins</label>
+                                                    <input type="number" class="form-control" id="txtStatWins" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Fights</label>
+                                                    <input type="number" class="form-control" id="txtStatFights" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group text-right">
+                                            <button type="button" class="btn btn-danger" id="btnSaveStat">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $("#btnMarkMeronWinner").click(function () {
+            var meron = {
+                Id: parseInt($("#slcMeronType").val()),
+                DarkLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "1",
+                YellowLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "2",
+                WhiteLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "3",
+                LightHackle: $("#frmMeron").find("input[name=hackle]:checked").val() == "1",
+                DarkHackle: $("#frmMeron").find("input[name=hackle]:checked").val() == "2",
+                Bannered: $("#frmMeron").find("input[name=bannered]:checked").val() == "1",
+                NonBannered: $("#frmMeron").find("input[name=bannered]:checked").val() == "2",
+                OpponentId: parseInt($("#slcWalaType").val())
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/savefightresult",
+                data: JSON.stringify(meron),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    alert("MERON WINS!");
+                    location.reload();
+                }
+            });
+        });
+
+        $("#btnMarkWalaWinner").click(function () {
+            var wala = {
+                Id: parseInt($("#slcWalaType").val()),
+                DarkLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "1",
+                YellowLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "2",
+                WhiteLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "3",
+                LightHackle: $("#frmWala").find("input[name=hackle]:checked").val() == "1",
+                DarkHackle: $("#frmWala").find("input[name=hackle]:checked").val() == "2",
+                Bannered: $("#frmWala").find("input[name=bannered]:checked").val() == "1",
+                NonBannered: $("#frmWala").find("input[name=bannered]:checked").val() == "2",
+                OpponentId: parseInt($("#slcMeronType").val())
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/savefightresult",
+                data: JSON.stringify(wala),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    alert("WALA WINS!");
+                    location.reload();
+                }
+            });
+        });
+
+        $("#btnNextResult").click(function () {
+            $("#preloaderRow").removeClass('hide');
+            $("#nextResult").addClass('hide');
+            $("#btnNextResult").attr('disabled', true);
+
+            var meron = {
+                Id: parseInt($("#slcMeronType").val()),
+                DarkLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "1",
+                YellowLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "2",
+                WhiteLegged: $("#frmMeron").find("input[name=legcolor]:checked").val() == "3",
+                LightHackle: $("#frmMeron").find("input[name=hackle]:checked").val() == "1",
+                DarkHackle: $("#frmMeron").find("input[name=hackle]:checked").val() == "2",
+                Bannered: $("#frmMeron").find("input[name=bannered]:checked").val() == "1",
+                NonBannered: $("#frmMeron").find("input[name=bannered]:checked").val() == "2"
+            }
+
+            var wala = {
+                Id: parseInt($("#slcWalaType").val()),
+                DarkLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "1",
+                YellowLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "2",
+                WhiteLegged: $("#frmWala").find("input[name=legcolor]:checked").val() == "3",
+                LightHackle: $("#frmWala").find("input[name=hackle]:checked").val() == "1",
+                DarkHackle: $("#frmWala").find("input[name=hackle]:checked").val() == "2",
+                Bannered: $("#frmWala").find("input[name=bannered]:checked").val() == "1",
+                NonBannered: $("#frmWala").find("input[name=bannered]:checked").val() == "2"
+            }
+
+            var roosters = [];
+            roosters.push(meron);
+            roosters.push(wala);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/nextresult",
+                data: JSON.stringify(roosters),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    debugger;
+                    $("#btnNextResult").removeAttr('disabled');
+                    $("#preloaderRow").addClass('hide');
+                    var color = data.ringSide == 'MERON' ? '#dc3545' : '#1b6ec2';
+                    //var result = '<h1 style="color:' + color + ';">' + data.ringSide + '-' + (data.status == 0 ? 'L' : 'W') + '</h1>';
+                    var result = '<h1 style="color:' + color + ';">' + data.ringSide + '</h1>';
+                    $("#nextResult").removeClass('hide').html(result);
+                }
+            });
+        });
+
+        $(".button-result-entry").click(function () {
+            var dataResRingSide = $(this).attr("data-res").split('-')[0];
+            var ringSide = dataResRingSide == "M" ? "MERON" : (dataResRingSide == "D" ? "DRAW" : "WALA");
+            var status = $(this).attr("data-res").split('-')[1];
+            $(".button-result-entry").attr('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: "/api/fightresult",
+                data: JSON.stringify({ Id: 0, RingSide: ringSide, Status: parseInt(status) }),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    $(".button-result-entry").removeAttr('disabled');
+                    getResults();
+
+                }
+            });
+        });
+
+        $("#btnSaveStat").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/api/reset",
+                dataType: 'json', data: JSON.stringify(
+                    {
+                        RoosterId: parseInt($("#slcStatRooster").val()),
+                        DarkLegs: parseInt($("#txtStatDarkLegs").val()),
+                        YellowLegs: parseInt($("#txtStatYellowLegs").val()),
+                        WhiteLegs: parseInt($("#txtWhiteDarkLegs").val()),
+                        DarkHackle: parseInt($("#txtStatDarkHackle").val()),
+                        LightHackle: parseInt($("#txtStatLightHackle").val()),
+                        Bannered: parseInt($("#txtStatBannered").val()),
+                        NonBannered: parseInt($("#txtStatNonBannered").val()),
+                        Wins: parseInt($("#txtStatWins").val()),
+                        Fights: parseInt($("#txtStatFights").val())
+                    }),
+                contentType: "application/json",
+                success: function (data) {
+                    alert('Stats Updated!');
+                }
+            });
+        });
+
+        $("#btnDownloadResults").click(function () {
+            window.open('/api/nextresults/download', '_blank');
+        });
+
+    });
+</script>

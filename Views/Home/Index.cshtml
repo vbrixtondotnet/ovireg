@@ -1,0 +1,297 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@inject OnlineSabong.VirtualGuide.Services.Interfaces.IUserService StatsService
+@model OnlineSabong.VirtualGuide.Models.IndexViewModel
+
+<style>
+    .hide {
+        display: none;
+    }
+
+    .panel-dark {
+        background-image: -webkit-linear-gradient(top,#3c3c3c 0,#222 100%);
+        background-image: -o-linear-gradient(top,#3c3c3c 0,#222 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#3c3c3c),to(#222));
+        background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        background-repeat: repeat-x;
+    }
+
+    #tbodyResults tr:first-child td {
+        border-top: none;
+    }
+
+    #tbodyResults {
+        color: white;
+    }
+
+        #tbodyResults tr td {
+            border-top-color: #504f4f;
+        }
+
+    .box {
+        border-radius: 4px 4px 0 0;
+        background: #292c31;
+        border: 1px solid hsla(0,0%,100%,.1);
+    }
+
+        .box .title {
+            padding-top: 10px;
+            display: block;
+            padding-bottom: 10px;
+            color: #ffdc11 !important;
+            font-size: 12px;
+        }
+
+    .panel {
+        border: none !important;
+        background: #292c31;
+        box-shadow:none;
+    }
+
+    .btn-danger {
+        background-image: none !important;
+        background-color: #f34141;
+    }
+    .btn-primary {
+        background-image: none !important;
+        background-color: #1e81f1;
+    }
+    .btn-success {
+        background-image: none !important;
+        background-color: #009900 !important;
+    }
+    .btn-outline-secondary {
+        background: none;
+        background-color: none;
+        border: 1px solid gray;
+        color: gray;
+        width:100%;
+    }
+
+    .form-check-inline{
+        float:left;
+        margin-right:10px;
+        min-width:120px;
+    }
+
+    #panelMeronAttributes form label {
+        color: #f34141;
+    }
+    #panelWalaAttributes form label {
+        color: #1e81f1;
+    }
+    #panelAdminTools form label {
+        color: #22cca5;
+    }
+
+    form label.form-check-label {
+        font-size: 12px;
+    }
+
+</style>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Change Password</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="text-center" style="color:#ffdc11!important">
+            <img src="~/images/dracaryslogo.png" style="width:6em;margin-bottom:20px;" />
+            <p>Welcome to WPC 15 Online Sabong Predictor App. Your virtual guide to win!</p>
+            <p>How to use? Please watch the video <a href="#">here</a></p>
+        </div>
+        <div class="row" style="margin-top:35px;margin-bottom:35px;">
+            
+            <div class="col-md-4 col-sm-12" style="float:none;margin:0px auto;">
+                <div class="col-md-12 box">
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="height:auto;">
+                            <div class="row" style="margin-bottom:10px;">
+                                <div class="col-md-4 text-center" style="margin-bottom:10px;">
+                                    <button class="btn btn-danger" id="btnMeron" style="width:100%;">MERON </button>
+                                </div>
+                                <div class="col-md-4 text-center" style="margin-bottom:10px;">
+                                    <button class="btn btn-success" id="btnDraw" style="width:100%;">DRAW </button>
+                                </div>
+                                <div class="col-md-4 text-center" style="margin-bottom:10px;">
+                                    <button class="btn btn-primary" id="btnWala" style="width:100%;">WALA </button>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom:10px;">
+                                <div class="col-md-12">
+                                    <button class="btn btn-secondary" id="btnNextResult" style="width:100%;background:none;background-color:#ffdc11;color:#504f4f;">GET POSSIBLE WINNER </button>
+                                </div>
+                            </div>
+                            <div class="row hide" id="preloaderRow" style="margin-bottom:25px;">
+                                <div class="col-md-12 text-center">
+                                    <img src="~/images/25.gif" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center hide" id="nextResult" style="margin-bottom:25px;">
+                                    <h1>MERON - L</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $("#btnMeron").click(function () {
+            var meron = {
+                Id: 1,
+                RingSide: "MERON",
+                Status: 1,
+                UserId: 1
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/savefightresult2",
+                data: JSON.stringify(meron),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    alert("MERON WINS!");
+                    location.reload();
+                }
+            });
+        });
+
+        $("#btnWala").click(function () {
+            var wala = {
+                Id: 1,
+                RingSide: "WALA",
+                Status: 1,
+                UserId:1
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/savefightresult2",
+                data: JSON.stringify(wala),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    alert("WALA WINS!");
+                    location.reload();
+                }
+            });
+        });
+
+        $("#btnDraw").click(function () {
+            var wala = {
+                Id: 1,
+                RingSide: "DRAW",
+                Status: 1,
+                UserId: 1
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/savefightresult2",
+                data: JSON.stringify(wala),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    alert("DRAW!");
+                    location.reload();
+                }
+            });
+        });
+
+        $("#btnNextResult").click(function () {
+            $("#preloaderRow").removeClass('hide');
+            $("#nextResult").addClass('hide');
+            $("#btnNextResult").attr('disabled', true);
+
+            debugger;
+          
+            $.ajax({
+                type: "GET",
+                url: "/api/nextresult2",
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    debugger;
+                    $("#btnNextResult").removeAttr('disabled');
+                    $("#preloaderRow").addClass('hide');
+                    var color = data.ringSide == 'MERON' ? '#dc3545' : data.ringSide == 'DRAW' ? '#009900' : '#1b6ec2';
+                    //var result = '<h1 style="color:' + color + ';">' + data.ringSide + '-' + (data.status == 0 ? 'L' : 'W') + '</h1>';
+                    var result = '<h1 style="color:' + color + ';">' + data.ringSide + '</h1>';
+                    $("#nextResult").removeClass('hide').html(result);
+                }
+            });
+        });
+
+        $(".button-result-entry").click(function () {
+            var dataResRingSide = $(this).attr("data-res").split('-')[0];
+            var ringSide = dataResRingSide == "M" ? "MERON" : (dataResRingSide == "D" ? "DRAW" : "WALA");
+            var status = $(this).attr("data-res").split('-')[1];
+            $(".button-result-entry").attr('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: "/api/fightresult",
+                data: JSON.stringify({ Id: 0, RingSide: ringSide, Status: parseInt(status) }),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    $(".button-result-entry").removeAttr('disabled');
+                    getResults();
+
+                }
+            });
+        });
+
+        $("#btnSaveStat").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/api/reset",
+                dataType: 'json', data: JSON.stringify(
+                    {
+                        RoosterId: parseInt($("#slcStatRooster").val()),
+                        DarkLegs: parseInt($("#txtStatDarkLegs").val()),
+                        YellowLegs: parseInt($("#txtStatYellowLegs").val()),
+                        WhiteLegs: parseInt($("#txtWhiteDarkLegs").val()),
+                        DarkHackle: parseInt($("#txtStatDarkHackle").val()),
+                        LightHackle: parseInt($("#txtStatLightHackle").val()),
+                        Bannered: parseInt($("#txtStatBannered").val()),
+                        NonBannered: parseInt($("#txtStatNonBannered").val()),
+                        Wins: parseInt($("#txtStatWins").val()),
+                        Fights: parseInt($("#txtStatFights").val())
+                    }),
+                contentType: "application/json",
+                success: function (data) {
+                    alert('Stats Updated!');
+                }
+            });
+        });
+
+        $("#btnDownloadResults").click(function () {
+            window.open('/api/nextresults/download', '_blank');
+        });
+
+    });
+</script>

@@ -1,0 +1,50 @@
+﻿@model OnlineSabong.VirtualGuide.Models.AuthResultModelcs
+
+<div class="container">
+    <main role="main" class="pb-3" style="padding-top:100px;">
+        <div class="text-center">
+            <div class="col-xs-12 col-md-4" style="display:block; float:none; margin:0px auto;">
+                <img src="~/images/dracaryslogo.png" style="width:100%;" />
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-xs-12 col-md-4" style="display:block; float:none; margin:0px auto;">
+                <form style="width:100%;" method="post" action="authenticate">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1" style="color:#ffcc00 ;">User Name</label>
+                        <input type="text" class="form-control" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1" style="color:#ffcc00 ;">Password</label>
+                        <input type="password" class="form-control" name="password">
+                    </div>
+                    @if (Model != null)
+                    {
+                        if (Model.ErrorCode == 404)
+                        {
+
+                            <div class="form-group">
+                                <label for="exampleInputPassword1" style="color:#ff0000;text-align:center;width:100%;">
+                                    <span style="color:#a00707;font-size:12px;">Invalid username or password! </span>
+                                </label>
+                            </div>
+                        }
+                        if (Model.ErrorCode == 400)
+                        {
+                            <div class="form-group">
+                                <label for="exampleInputPassword1" style="color:#ff0000;text-align:center;width:100%;">
+                                    Your FREE TRIAL has expired! <br />
+                                    <span style="color:#a00707;font-size:12px;">Please load points to your WPC15 Player Account in order to use this app. </span>
+                                </label>
+                            </div>
+                        }
+                    }
+                    <div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>
